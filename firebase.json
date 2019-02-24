@@ -5,8 +5,8 @@
   },
   "functions": {
     "predeploy": [
-      "npm --prefix ./alphabet-soup run lint",
-      "npm --prefix ./alphabet-soup run build"
+      "npm --prefix ./functions run lint",
+      "npm --prefix ./functions run build"
     ]
   },
   "hosting": {
@@ -15,6 +15,10 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
+    ],
+    "predeploy": [
+      "npm --prefix ./alphabet-soup run lint",
+      "npm --prefix ./alphabet-soup run build"
     ],
     "rewrites": [
       {
