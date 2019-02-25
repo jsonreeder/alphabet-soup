@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -21,13 +21,12 @@ export class SoupPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.id = this.route.params.pipe(
-      map(params => params.id)
-    );
-
     const userId = this.afAuth.auth.currentUser.uid;
-    this.ingredients = this.afs
-      .collection(`users/${userId}/soups/${this.id}`)
-      .valueChanges();
+    this.id = this.route.params.pipe(
+      tap(params => this.ingredients = this.afs
+        .collection(`users/${userId}/soups/${params.id}/ingredients`)
+        .valueChanges()),
+      map(params => params.id),
+    );
   }
 }
