@@ -6,10 +6,15 @@ export async function handler(
   snapshot: firestore.DocumentSnapshot,
   context: functions.EventContext
   ): Promise<boolean> {
-    console.log(context.params);
+    const { userId, soupId } = context.params;
     const response = await fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes');
     const json = await response.json();
-    console.log(json);
-    console.log(json[0]);
+    const body = json[0]
+    console.log(body);
+
+    firestore().doc(`users/${userId}/soups/${soupId}/ingredients/ronSwanson`).set({
+      title: 'Ron Swanson',
+      body,
+    })
     return true;
 }
