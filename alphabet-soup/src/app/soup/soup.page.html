@@ -8,5 +8,14 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-card *ngFor="let ingredient of ingredients | async">
+    <ion-card-header>
+      <ion-card-title>
+        {{ ingredient.title }}
+      </ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      {{ ingredient.body }}
+    </ion-card-content>
+  </ion-card>
 </ion-content>
