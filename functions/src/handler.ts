@@ -12,7 +12,7 @@ export async function handler(
     const body = json[0]
     console.log(body);
 
-    firestore().doc(`users/${userId}/soups/${soupId}/ingredients/ronSwanson`).set({
+    await firestore().doc(`users/${userId}/soups/${soupId}/ingredients/ronSwanson`).set({
       title: 'Ron Swanson',
       body,
     })
