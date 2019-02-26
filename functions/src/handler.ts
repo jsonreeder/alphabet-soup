@@ -1,20 +1,29 @@
 import * as functions from 'firebase-functions';
 import { firestore } from 'firebase-admin';
 import fetch = require('node-fetch');
+import assert = require('assert');
 
-export async function handler(
+export const handler = (
+  path: string,
+  accessor,
+  title: string,
+) => async (
   snapshot: firestore.DocumentSnapshot,
   context: functions.EventContext
-  ): Promise<boolean> {
+): Promise<true> => {
+    console.log(context.params);
     const { userId, soupId } = context.params;
-    const response = await fetch('http://ron-swanson-quotes.herokuapp.com/v2/quotes');
-    const json = await response.json();
-    const body = json[0]
-    console.log(body);
+    const body = await fetch(path)
+      .then(res => res.json())
+      .then(json => accessor(json));
+    assert(body);
 
-    await firestore().doc(`users/${userId}/soups/${soupId}/ingredients/ronSwanson`).set({
-      title: 'Ron Swanson',
+    const docPath = `users/${userId}/soups/${soupId}/ingredients/${title.replace(' ', '_')}`;
+
+    await firestore().doc(docPath).set({
+      title,
       body,
     })
+    console.log('wrote to path ', docPath);
     return true;
-}
+  }
